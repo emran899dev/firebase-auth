@@ -48,7 +48,9 @@ function App() {
         isSignedIn: false,
         name: '',
         email: '',
-        photo: ''
+        photo: '',
+        error: '',
+        success: ''
       }
       setUser(sigedOutUser)
     })
@@ -58,7 +60,7 @@ function App() {
   }
 
   const handelBlur = (e) => {
-    debugger;
+    // debugger;
     let isFormValid = true;
     // console.log(e.target.name, e.target.value);
     if(e.target.name === 'email'){
@@ -76,8 +78,27 @@ function App() {
     }
   }
 
-  const handelSubmit = () => {
-
+  const handelSubmit = (e) => {
+    // console.log(user.email,user.password);
+    if(user.email && user.password){
+      // console.log('Submitting');
+      firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
+      .then(res => {
+        const newUserInfo = {...user}
+        newUserInfo.error = ''
+        newUserInfo.success = true;
+        setUser(newUserInfo);
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const newUserInfo = {...user}
+        newUserInfo.error = error.message;
+        newUserInfo.success = false;
+       setUser(newUserInfo);
+        // ...
+      });
+    }
+    e.preventDefault()
   }
   return (
     <div className="App">
@@ -95,15 +116,19 @@ function App() {
      }
      <div>
        <h1>Our own Authenticaion</h1>
-       <p>Email: {user.email}</p>
-       <p>Password: {user.password}</p>
        <form onSubmit={handelSubmit}>
+         <input type="text" name="name" id="" onBlur={handelBlur} placeholder="Your name"/>
+         <br/>
          <input type="text" name="email" id="" onBlur={handelBlur} placeholder="Your E-mail" required/>
          <br/>
          <input type="password" name="password" id="" onBlur={handelBlur} placeholder="Your passwor" required/>
          <br/>
          <input type="submit" value="Submit"/>
        </form>
+       <p style={{color: 'red'}}>{user.error}</p>
+       {
+         user.success && <p style={{color: 'green'}}>user create success</p>
+       }
      </div>
     </div>
   );
