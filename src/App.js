@@ -15,6 +15,7 @@ function App() {
     isSignedIn: false,
     name: '',
     email: '',
+    password: '',
     photo: ''
   })
 
@@ -57,14 +58,21 @@ function App() {
   }
 
   const handelBlur = (e) => {
-    console.log(e.target.name, e.target.value);
+    debugger;
+    let isFormValid = true;
+    // console.log(e.target.name, e.target.value);
     if(e.target.name === 'email'){
-      const isEmailValid = /\S+@\S+\.\S+/.test(e.target.value);
-      console.log(isEmailValid);
+      isFormValid = /\S+@\S+\.\S+/.test(e.target.value);
+     
     }
     if(e.target.name === 'password'){
-      const isPasswordValid = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(e.target.value);
-      console.log(isPasswordValid);
+      isFormValid = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(e.target.value);
+      
+    }
+    if(isFormValid){
+      const newUserInfo = {...user};
+      newUserInfo[e.target.name] = e.target.value;  
+      setUser(newUserInfo);
     }
   }
 
@@ -87,6 +95,8 @@ function App() {
      }
      <div>
        <h1>Our own Authenticaion</h1>
+       <p>Email: {user.email}</p>
+       <p>Password: {user.password}</p>
        <form onSubmit={handelSubmit}>
          <input type="text" name="email" id="" onBlur={handelBlur} placeholder="Your E-mail" required/>
          <br/>
