@@ -55,6 +55,22 @@ function App() {
 
     }))
   }
+
+  const handelBlur = (e) => {
+    console.log(e.target.name, e.target.value);
+    if(e.target.name === 'email'){
+      const isEmailValid = /\S+@\S+\.\S+/.test(e.target.value);
+      console.log(isEmailValid);
+    }
+    if(e.target.name === 'password'){
+      const isPasswordValid = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(e.target.value);
+      console.log(isPasswordValid);
+    }
+  }
+
+  const handelSubmit = () => {
+
+  }
   return (
     <div className="App">
       {
@@ -69,6 +85,16 @@ function App() {
          <img src={user.photo} alt=""/>
        </div>
      }
+     <div>
+       <h1>Our own Authenticaion</h1>
+       <form onSubmit={handelSubmit}>
+         <input type="text" name="email" id="" onBlur={handelBlur} placeholder="Your E-mail" required/>
+         <br/>
+         <input type="password" name="password" id="" onBlur={handelBlur} placeholder="Your passwor" required/>
+         <br/>
+         <input type="submit" value="Submit"/>
+       </form>
+     </div>
     </div>
   );
 }
